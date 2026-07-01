@@ -1,0 +1,24 @@
+name: My first pipeline
+
+on:
+    push: 
+        branches: ["main"]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Clone the code
+              uses: actions/checkout@v4
+            - name: Build image
+              run:
+                docker build -t dkflora/cicd-portfolio .
+            - name: Docker login
+              uses: docker/login-action@v3
+              with: 
+                username: dkflora
+                password: ${{ secrets.DOCKER_PASSWORD }}
+            - name: Push Image
+              run:
+                docker push dkflora/cicd-portfolio
+
